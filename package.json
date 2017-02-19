@@ -1,0 +1,70 @@
+{
+    "author": "NICK P",
+    "dependencies": {},
+    "keywords": [],
+    "name": "tank-day-date-sec",
+    "pebble": {
+        "displayName": "Tank Day Date Sec",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": [
+                {
+                    "file": "images/Dial_no_bt",
+                    "name": "IMAGE_DIAL_NO_BT",
+                    "targetPlatforms": [
+                        "aplite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
+                    "characterRegex": "[0-9]",
+                    "file": "fonts/Baskvill",
+                    "name": "FONT_BASKVILL_22",
+                    "targetPlatforms": [
+                        "aplite"
+                    ],
+                    "trackingAdjust": -2,
+                    "type": "font"
+                },
+                {
+                    "file": "images/Dial",
+                    "name": "IMAGE_DIAL_BLANK",
+                    "targetPlatforms": [
+                        "aplite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
+                    "file": "images/dial small",
+                    "menuIcon": true,
+                    "name": "IMAGE_DIAL_SMALL",
+                    "targetPlatforms": [
+                        "aplite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
+                    "characterRegex": "[A-Z]",
+                    "file": "fonts/CANDARA",
+                    "name": "FONT_CANDARA_14",
+                    "targetPlatforms": [
+                        "aplite"
+                    ],
+                    "trackingAdjust": -1,
+                    "type": "font"
+                }
+            ]
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite"
+        ],
+        "uuid": "ecc8f112-318f-4ee2-be11-53c63b8a1139",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "1.2.0"
+}
