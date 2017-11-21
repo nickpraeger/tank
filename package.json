@@ -14,7 +14,9 @@
                     "file": "images/Dial_no_bt",
                     "name": "IMAGE_DIAL_NO_BT",
                     "targetPlatforms": [
-                        "aplite"
+                        "aplite",
+                        "basalt",
+                        "diorite"
                     ],
                     "type": "bitmap"
                 },
@@ -23,7 +25,9 @@
                     "file": "fonts/Baskvill",
                     "name": "FONT_BASKVILL_22",
                     "targetPlatforms": [
-                        "aplite"
+                        "aplite",
+                        "basalt",
+                        "diorite"
                     ],
                     "trackingAdjust": -2,
                     "type": "font"
@@ -32,7 +36,9 @@
                     "file": "images/Dial",
                     "name": "IMAGE_DIAL_BLANK",
                     "targetPlatforms": [
-                        "aplite"
+                        "aplite",
+                        "basalt",
+                        "diorite"
                     ],
                     "type": "bitmap"
                 },
@@ -41,7 +47,9 @@
                     "menuIcon": true,
                     "name": "IMAGE_DIAL_SMALL",
                     "targetPlatforms": [
-                        "aplite"
+                        "aplite",
+                        "basalt",
+                        "diorite"
                     ],
                     "type": "bitmap"
                 },
@@ -50,7 +58,9 @@
                     "file": "fonts/CANDARA",
                     "name": "FONT_CANDARA_14",
                     "targetPlatforms": [
-                        "aplite"
+                        "aplite",
+                        "basalt",
+                        "diorite"
                     ],
                     "trackingAdjust": -1,
                     "type": "font"
@@ -59,12 +69,14 @@
         },
         "sdkVersion": "3",
         "targetPlatforms": [
-            "aplite"
+            "aplite",
+            "basalt",
+            "diorite"
         ],
         "uuid": "ecc8f112-318f-4ee2-be11-53c63b8a1139",
         "watchapp": {
             "watchface": true
         }
     },
-    "version": "1.2.0"
+    "version": "1.4.0"
 }

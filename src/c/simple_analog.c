@@ -38,6 +38,7 @@ static void handle_bluetooth(bool connection){
 
   if(connected==0){
   layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer), 0);
+  vibes_long_pulse();
   layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_no_bt), 1);
 }
   else{
@@ -64,14 +65,14 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
 
 //  batt hand
   
-  graphics_context_set_fill_color(ctx, GColorBlack);
-  graphics_context_set_stroke_color(ctx, GColorBlack);
+  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
+  graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
   gpath_rotate_to(s_batt_arrow,  (TRIG_MAX_ANGLE/-6) +(TRIG_MAX_ANGLE * battery_level / 300));
   gpath_draw_outline(ctx, s_batt_arrow);
   
 // dot in the middle of batt hand
   
-  graphics_context_set_fill_color(ctx, GColorBlack);
+  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
   uint16_t radius_batt = 3;
   graphics_fill_circle(ctx, GPoint(71,122), radius_batt);
   graphics_context_set_fill_color(ctx, GColorWhite);
@@ -84,8 +85,8 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   graphics_draw_line(ctx, second_hand, center);
 
 // minute/hour hand
-
-  graphics_context_set_fill_color(ctx, GColorBlack);
+  
+  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
   graphics_context_set_stroke_color(ctx, GColorWhite);
   gpath_rotate_to(s_minute_arrow, TRIG_MAX_ANGLE * t->tm_min / 60);
   gpath_draw_filled(ctx, s_minute_arrow);
@@ -97,7 +98,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
 
 // dot in the middle of time hands
   
-  graphics_context_set_fill_color(ctx, GColorBlack);
+  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
   uint16_t radius = 8;
   graphics_fill_circle(ctx, GPoint(71,80), radius);
   graphics_context_set_fill_color(ctx, GColorWhite);
