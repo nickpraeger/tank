@@ -11,6 +11,12 @@
         "resources": {
             "media": [
                 {
+                    "file": "images/Dial_neg",
+                    "name": "IMAGE_DIAL_NEG",
+                    "targetPlatforms": null,
+                    "type": "bitmap"
+                },
+                {
                     "file": "images/Dial_no_bt",
                     "name": "IMAGE_DIAL_NO_BT",
                     "targetPlatforms": [
