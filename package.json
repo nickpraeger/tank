@@ -89,10 +89,10 @@
             "basalt",
             "diorite"
         ],
-        "uuid": "509264b5-0cfe-4d47-a9f5-ae78e39fb80f",
+        "uuid": "bad6ef1d-9f96-4612-a832-3ddfdff7531c",
         "watchapp": {
             "watchface": true
         }
     },
-    "version": "1.5.0"
+    "version": "2.0.0"
 }
