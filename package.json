@@ -11,6 +11,16 @@
         "resources": {
             "media": [
                 {
+                    "file": "images/Dial_neg_no_bt",
+                    "name": "IMAGE_DIAL_NEG_NO_BT",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
                     "file": "images/Dial_neg",
                     "name": "IMAGE_DIAL_NEG",
                     "targetPlatforms": null,

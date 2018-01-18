@@ -7,13 +7,14 @@ static Layer *s_date_layer, *s_hands_layer;
 static TextLayer *s_day_label, *s_num_label, *s_day_label_neg, *s_num_label_neg;
 static GFont s_font;
 static GFont s_font_date;
-static BitmapLayer *s_bitmap_layer, *s_bitmap_layer_no_bt;
-static GBitmap *s_bitmap, *s_bitmap_no_bt;
+static BitmapLayer *s_bitmap_layer, *s_bitmap_layer_no_bt, *s_bitmap_layer_neg, *s_bitmap_layer_neg_no_bt;
+static GBitmap *s_bitmap, *s_bitmap_no_bt, *s_bitmap_neg, *s_bitmap_neg_no_bt;
 
 
 static GPath *s_minute_arrow, *s_hour_arrow, *s_batt_arrow;
 static char s_num_buffer[4], s_day_buffer[10];
 static int battery_level = 0;
+bool colour_state = 1;
 bool connected = 1;
 
 char lower_to_upper(char ch1) {
@@ -28,34 +29,77 @@ return ch2;
 }
 }
 
+
+void colour_update_proc(){
+
+  if(colour_state==0 && connected==1) {
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_neg),0);
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_neg_no_bt),1);   
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer), 1);
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_no_bt), 1);
+    
+  layer_set_hidden(text_layer_get_layer(s_day_label),1);
+  layer_set_hidden(text_layer_get_layer(s_day_label_neg),0);
+    
+  layer_set_hidden(text_layer_get_layer(s_num_label),1);
+  layer_set_hidden(text_layer_get_layer(s_num_label_neg),0);  
+}
+  if(colour_state==0 && connected==0) {
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_neg),1);
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_neg_no_bt),0);   
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer), 1);
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_no_bt), 1);
+    
+  layer_set_hidden(text_layer_get_layer(s_day_label),1);
+  layer_set_hidden(text_layer_get_layer(s_day_label_neg),0);
+    
+  layer_set_hidden(text_layer_get_layer(s_num_label),1);
+  layer_set_hidden(text_layer_get_layer(s_num_label_neg),0);  
+  }
+   if(colour_state==1 && connected==0) {
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_neg),1);
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_neg_no_bt),1);   
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer), 1);
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_no_bt), 0);
+     
+  layer_set_hidden(text_layer_get_layer(s_day_label),0);
+  layer_set_hidden(text_layer_get_layer(s_day_label_neg),1);
+     
+  layer_set_hidden(text_layer_get_layer(s_num_label),0);
+  layer_set_hidden(text_layer_get_layer(s_num_label_neg),1);  
+  }
+      
+  if(colour_state==1 && connected==1) {
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_neg),1);
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_neg_no_bt),1);   
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer), 0);
+  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_no_bt), 1);
+    
+  layer_set_hidden(text_layer_get_layer(s_day_label),0);
+  layer_set_hidden(text_layer_get_layer(s_day_label_neg),1);
+    
+  layer_set_hidden(text_layer_get_layer(s_num_label),0);
+  layer_set_hidden(text_layer_get_layer(s_num_label_neg),1);  
+  }
+  
+}
 static void battery_handler(BatteryChargeState charge){
 battery_level = charge.charge_percent;
 }
 
 
 static void handle_bluetooth(bool connection){
-  connected = !connection;
-
-  if(connected==0){
-  vibes_long_pulse();
-  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer), 0);
-  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_no_bt), 1);
-  layer_set_hidden(text_layer_get_layer(s_day_label),0);
-  layer_set_hidden(text_layer_get_layer(s_day_label_neg),1);
-  layer_set_hidden(text_layer_get_layer(s_num_label),0);
-  layer_set_hidden(text_layer_get_layer(s_num_label_neg),1);  
-}
-  else{
-  vibes_double_pulse();
-  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer), 1);
-  layer_set_hidden(bitmap_layer_get_layer(s_bitmap_layer_no_bt), 0);
-  layer_set_hidden(text_layer_get_layer(s_day_label),1);
-  layer_set_hidden(text_layer_get_layer(s_day_label_neg),0);
-  layer_set_hidden(text_layer_get_layer(s_num_label),1);
-  layer_set_hidden(text_layer_get_layer(s_num_label_neg),0);  
-  }
-}
+  connected = connection;
+  colour_update_proc();
   
+}
+
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+  // A tap event occured
+  colour_state = !colour_state;
+  colour_update_proc();
+  
+}
 static void hands_update_proc(Layer *layer, GContext *ctx) {
   GRect bounds = layer_get_bounds(layer);
   GPoint center = GPoint (71,80);
@@ -72,7 +116,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   
 
 //  batt hand
-  if (connected==1){
+  if (colour_state==0){
     graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
     graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
   }
@@ -84,7 +128,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
     gpath_draw_outline(ctx, s_batt_arrow);
   
 // dot in the middle of batt hand
-  if (connected==1){
+  if (colour_state==0){
   graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
   }
   else {
@@ -93,7 +137,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   uint16_t radius_batt = 3;
   graphics_fill_circle(ctx, GPoint(71,122), radius_batt);
   
-  if (connected==1){
+  if (colour_state==0){
       graphics_context_set_fill_color(ctx, GColorBlack);
   }
   else {
@@ -104,7 +148,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
 
   
 // second hand
- if (connected==1){
+ if (colour_state==0){
   graphics_context_set_stroke_color(ctx, GColorWhite);
  }
   else {
@@ -113,7 +157,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   graphics_draw_line(ctx, second_hand, center);
 
 // minute/hour hand
-  if (connected==1){
+  if (colour_state==0){
   graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
   graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorBlack, GColorBlack));
   }
@@ -131,7 +175,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
 
 // dot in the middle of time hands
   
-  if (connected==1){
+  if (colour_state==0){
   graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
   }
   else {
@@ -140,7 +184,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   uint16_t radius = 8;
   graphics_fill_circle(ctx, GPoint(71,80), radius);
   
-  if (connected==1){
+  if (colour_state==0){
   graphics_context_set_fill_color(ctx, GColorBlack);
   }
   else {
@@ -181,8 +225,16 @@ static void window_load(Window *window) {
   bitmap_layer_set_bitmap(s_bitmap_layer, s_bitmap);
 
   s_bitmap_layer_no_bt = bitmap_layer_create(bounds);
-  s_bitmap_no_bt = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DIAL_NEG);
+  s_bitmap_no_bt = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DIAL_NO_BT);
   bitmap_layer_set_bitmap(s_bitmap_layer_no_bt, s_bitmap_no_bt);
+  
+  s_bitmap_layer_neg = bitmap_layer_create(bounds);
+  s_bitmap_neg = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DIAL_NEG);
+  bitmap_layer_set_bitmap(s_bitmap_layer_neg, s_bitmap_neg);
+
+  s_bitmap_layer_neg_no_bt = bitmap_layer_create(bounds);
+  s_bitmap_neg_no_bt = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DIAL_NEG_NO_BT);
+  bitmap_layer_set_bitmap(s_bitmap_layer_neg_no_bt, s_bitmap_neg_no_bt);  
   
 
   s_date_layer = layer_create(bounds);
@@ -224,6 +276,8 @@ static void window_load(Window *window) {
   
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bitmap_layer));
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bitmap_layer_no_bt));
+  layer_add_child(window_layer, bitmap_layer_get_layer(s_bitmap_layer_neg));
+  layer_add_child(window_layer, bitmap_layer_get_layer(s_bitmap_layer_neg_no_bt));
  
   
   layer_add_child(window_layer, s_date_layer);
@@ -241,8 +295,13 @@ static void window_load(Window *window) {
 static void window_unload(Window *window) {
   
   gbitmap_destroy(s_bitmap);
+  gbitmap_destroy(s_bitmap_neg);
+  gbitmap_destroy(s_bitmap_no_bt);
+  gbitmap_destroy(s_bitmap_neg_no_bt);
   bitmap_layer_destroy(s_bitmap_layer);
   bitmap_layer_destroy(s_bitmap_layer_no_bt);
+  bitmap_layer_destroy(s_bitmap_layer_neg);
+  bitmap_layer_destroy(s_bitmap_layer_neg_no_bt);
   layer_destroy(s_date_layer);
 
   text_layer_destroy(s_day_label);
@@ -279,6 +338,9 @@ static void init() {
   
   battery_state_service_subscribe(battery_handler);
   tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
+  
+  // Subscribe to tap events
+  accel_tap_service_subscribe(accel_tap_handler);
  
   connection_service_subscribe((ConnectionHandlers) {
     .pebble_app_connection_handler = handle_bluetooth
@@ -295,6 +357,7 @@ static void deinit() {
   connection_service_unsubscribe();
   battery_state_service_unsubscribe();
   tick_timer_service_unsubscribe();
+  accel_tap_service_unsubscribe();
   
   window_destroy(s_window);
 }
