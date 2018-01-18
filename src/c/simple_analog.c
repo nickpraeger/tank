@@ -1,6 +1,7 @@
 #include "simple_analog.h"
 #include <ctype.h>
 #include "pebble.h"
+#include <time.h>
 
 static Window *s_window;
 static Layer *s_date_layer, *s_hands_layer;
@@ -16,6 +17,11 @@ static char s_num_buffer[4], s_day_buffer[10];
 static int battery_level = 0;
 bool colour_state = 1;
 bool connected = 1;
+
+
+#define TAP_TIME 1000
+time_t timeOfLastTap = 0;
+static bool is_tapped_waiting;
 
 char lower_to_upper(char ch1) {
 char ch2;
@@ -94,12 +100,39 @@ static void handle_bluetooth(bool connection){
   
 }
 
-static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
-  // A tap event occured
+void double_tap() {
+  // ACTION TO BE PERFORMED AFTER DOUBLE TAP
   colour_state = !colour_state;
   colour_update_proc();
+}
+
+static void timer_callback() {
+  is_tapped_waiting = false;
+
+  // DEBUG ONLY - VIBE TRIGGERS ANOTHER TAP
+  // vibes_short_pulse();
+}
+
+// Tap Handler
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+  // A tap event occured
+    if (!is_tapped_waiting) {
+      is_tapped_waiting = true;
+      timeOfLastTap = time(NULL);
+    }
+    
+    else {
+       if (difftime(time(NULL), timeOfLastTap) < TAP_TIME) {
+      double_tap();
+      is_tapped_waiting = false;
+    }
+      else {
+        is_tapped_waiting = true;
+      }
+  }
   
 }
+
 static void hands_update_proc(Layer *layer, GContext *ctx) {
   GRect bounds = layer_get_bounds(layer);
   GPoint center = GPoint (71,80);
