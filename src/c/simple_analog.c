@@ -19,7 +19,7 @@ bool colour_state = 1;
 bool connected = 1;
 
 
-#define TAP_TIME 1000
+#define TAP_TIME 2
 time_t timeOfLastTap = 0;
 static bool is_tapped_waiting;
 
@@ -106,12 +106,6 @@ void double_tap() {
   colour_update_proc();
 }
 
-static void timer_callback() {
-  is_tapped_waiting = false;
-
-  // DEBUG ONLY - VIBE TRIGGERS ANOTHER TAP
-  // vibes_short_pulse();
-}
 
 // Tap Handler
 static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
@@ -128,6 +122,7 @@ static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
     }
       else {
         is_tapped_waiting = true;
+        timeOfLastTap = time(NULL);
       }
   }
   
