@@ -174,7 +174,24 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
 
   graphics_fill_circle(ctx, GPoint(71,122), 1);
 
-  
+  // minute/hour hand
+  if (colour_state==0){
+  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
+  graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorBlack, GColorBlack));
+  }
+  else {
+  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
+  graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorWhite, GColorWhite));  
+  }
+ 
+  gpath_rotate_to(s_hour_arrow, (TRIG_MAX_ANGLE * (((t->tm_hour % 12) * 6) + (t->tm_min / 10))) / (12 * 6));
+  gpath_draw_filled(ctx, s_hour_arrow);
+  gpath_draw_outline(ctx, s_hour_arrow);
+
+  gpath_rotate_to(s_minute_arrow, TRIG_MAX_ANGLE * t->tm_min / 60);
+  gpath_draw_filled(ctx, s_minute_arrow);
+  gpath_draw_outline(ctx, s_minute_arrow);
+
 // second hand
  if (colour_state==0){
   graphics_context_set_stroke_color(ctx, GColorWhite);
@@ -184,22 +201,6 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   }
   graphics_draw_line(ctx, second_hand, center);
 
-// minute/hour hand
-  if (colour_state==0){
-  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
-  graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorBlack, GColorBlack));
-  }
-  else {
-  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
-  graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorWhite, GColorWhite));  
-  }
-  gpath_rotate_to(s_minute_arrow, TRIG_MAX_ANGLE * t->tm_min / 60);
-  gpath_draw_filled(ctx, s_minute_arrow);
-  gpath_draw_outline(ctx, s_minute_arrow);
-
-  gpath_rotate_to(s_hour_arrow, (TRIG_MAX_ANGLE * (((t->tm_hour % 12) * 6) + (t->tm_min / 10))) / (12 * 6));
-  gpath_draw_filled(ctx, s_hour_arrow);
-  gpath_draw_outline(ctx, s_hour_arrow);
 
 // dot in the middle of time hands
   
