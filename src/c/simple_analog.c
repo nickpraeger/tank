@@ -192,6 +192,17 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   gpath_draw_filled(ctx, s_minute_arrow);
   gpath_draw_outline(ctx, s_minute_arrow);
 
+ // dot in the middle of time hands
+  
+  if (colour_state==0){
+  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
+  }
+  else {
+  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
+  }
+  uint16_t radius = 8;
+  graphics_fill_circle(ctx, GPoint(71,80), radius); 
+  
 // second hand
  if (colour_state==0){
   graphics_context_set_stroke_color(ctx, GColorWhite);
@@ -201,18 +212,6 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   }
   graphics_draw_line(ctx, second_hand, center);
 
-
-// dot in the middle of time hands
-  
-  if (colour_state==0){
-  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorYellow, GColorWhite));
-  }
-  else {
-  graphics_context_set_fill_color(ctx, PBL_IF_COLOR_ELSE(GColorBlue, GColorBlack));
-  }
-  uint16_t radius = 8;
-  graphics_fill_circle(ctx, GPoint(71,80), radius);
-  
   if (colour_state==0){
   graphics_context_set_fill_color(ctx, GColorBlack);
   }
