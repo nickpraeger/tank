@@ -1,56 +1,26 @@
 {
-    "author": "NICK P",
-    "dependencies": {},
+    "author": "nickpraeger",
+    "dependencies": {
+        "pebble-clay": "^1.0.4"
+    },
     "keywords": [],
-    "name": "tank-day-date-sec",
+    "name": "tank-day-date-with-settings",
     "pebble": {
-        "displayName": "Tank Day Date Sec",
+        "capabilities": [
+            "configurable"
+        ],
+        "displayName": "Tank Day Date with Settings",
         "enableMultiJS": true,
-        "messageKeys": [],
+        "messageKeys": [
+            "colour_state",
+            "seconds_hand"
+        ],
         "projectType": "native",
         "resources": {
             "media": [
                 {
-                    "file": "images/Dial_neg_no_bt",
-                    "name": "IMAGE_DIAL_NEG_NO_BT",
-                    "targetPlatforms": [
-                        "aplite",
-                        "basalt",
-                        "diorite"
-                    ],
-                    "type": "bitmap"
-                },
-                {
-                    "file": "images/Dial_neg",
-                    "name": "IMAGE_DIAL_NEG",
-                    "targetPlatforms": null,
-                    "type": "bitmap"
-                },
-                {
-                    "file": "images/Dial_no_bt",
-                    "name": "IMAGE_DIAL_NO_BT",
-                    "targetPlatforms": [
-                        "aplite",
-                        "basalt",
-                        "diorite"
-                    ],
-                    "type": "bitmap"
-                },
-                {
-                    "characterRegex": "[0-9]",
-                    "file": "fonts/Baskvill",
-                    "name": "FONT_BASKVILL_22",
-                    "targetPlatforms": [
-                        "aplite",
-                        "basalt",
-                        "diorite"
-                    ],
-                    "trackingAdjust": -2,
-                    "type": "font"
-                },
-                {
-                    "file": "images/Dial",
-                    "name": "IMAGE_DIAL_BLANK",
+                    "file": "images/Dial neg small",
+                    "name": "IMAGE_DIAL_NEG_SMALL",
                     "targetPlatforms": [
                         "aplite",
                         "basalt",
@@ -70,6 +40,46 @@
                     "type": "bitmap"
                 },
                 {
+                    "file": "images/Dial_no_bt",
+                    "name": "IMAGE_DIAL_NO_BT",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
+                    "file": "images/Dial_neg_no_bt",
+                    "name": "IMAGE_DIAL_NEG_NO_BT",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
+                    "file": "images/Dial_neg",
+                    "name": "IMAGE_DIAL_NEG",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
+                    "file": "images/Dial",
+                    "name": "IMAGE_DIAL_BLANK",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
                     "characterRegex": "[A-Z]",
                     "file": "fonts/CANDARA",
                     "name": "FONT_CANDARA_14",
@@ -79,6 +89,18 @@
                         "diorite"
                     ],
                     "trackingAdjust": -1,
+                    "type": "font"
+                },
+                {
+                    "characterRegex": "[0-9]",
+                    "file": "fonts/Baskvill",
+                    "name": "FONT_BASKVILL_22",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "trackingAdjust": -2,
                     "type": "font"
                 }
             ]
@@ -94,5 +116,5 @@
             "watchface": true
         }
     },
-    "version": "2.1.0"
+    "version": "3.0.0"
 }
