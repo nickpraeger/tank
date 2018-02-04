@@ -4,12 +4,12 @@
         "pebble-clay": "^1.0.4"
     },
     "keywords": [],
-    "name": "tank-day-date-with-settings",
+    "name": "tank-day-date-sec",
     "pebble": {
         "capabilities": [
             "configurable"
         ],
-        "displayName": "Tank Day Date with Settings",
+        "displayName": "Tank Day Date Sec",
         "enableMultiJS": true,
         "messageKeys": [
             "colour_state",
@@ -116,5 +116,5 @@
             "watchface": true
         }
     },
-    "version": "3.0.0"
+    "version": "2.3.0"
 }
