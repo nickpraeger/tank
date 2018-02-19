@@ -120,8 +120,11 @@ void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {
     seconds_hand = seconds_hand_t->value->int32 == 1;
     persist_write_bool(key2, seconds_hand);
   }
-
+  
+// Return to low power Bluetooth state
+  app_comm_set_sniff_interval(SNIFF_INTERVAL_NORMAL);
   colour_update_proc();
+ 
 }
 
 static void battery_handler(BatteryChargeState charge){
@@ -133,6 +136,10 @@ battery_level = charge.charge_percent;
 static void handle_bluetooth(bool connection){
   connected = connection;
   colour_update_proc();
+  
+// Return to low power Bluetooth state
+  app_comm_set_sniff_interval(SNIFF_INTERVAL_NORMAL);
+  colour_update_proc();
 }
 
 
@@ -141,6 +148,7 @@ static void handle_bluetooth(bool connection){
 static void hands_update_proc(Layer *layer, GContext *ctx) {
   GRect bounds = layer_get_bounds(layer);
   GPoint center = GPoint (71,80);
+  colour_update_proc();
   
 // Assign second hand length 
   const int16_t second_hand_length = bounds.size.w / 2;
@@ -175,9 +183,10 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
    
 
 //  batt hand
-    graphics_context_set_fill_color(ctx, bg_color);
+  //  graphics_context_set_fill_color(ctx, hands_fill_color);
     graphics_context_set_stroke_color(ctx, hands_fill_color);
     gpath_rotate_to(s_batt_arrow,  (TRIG_MAX_ANGLE/-6) +(TRIG_MAX_ANGLE * battery_level / 300));
+  //gpath_draw_filled(ctx, s_batt_arrow);  
     gpath_draw_outline(ctx, s_batt_arrow);
   
 // dots in the middle of batt hand
@@ -218,7 +227,7 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
 }
 
 
-static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed) {
+static void handle_time_update(struct tm *tick_time, TimeUnits units_changed) {
   layer_mark_dirty(window_get_root_layer(s_window));
 }
 
@@ -259,9 +268,7 @@ static void init() {
 
  // Subscribe to battery events
   battery_state_service_subscribe(battery_handler);
-  
-// Subscribe to seconds tick event  
-  tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
+
 
 // Subscribe to bluetooth connectivity events
   connection_service_subscribe((ConnectionHandlers) {
@@ -274,11 +281,24 @@ static void init() {
 // Open AppMessage connection
   app_message_register_inbox_received(prv_inbox_received_handler);
   app_message_open(128, 128);
+
+// Return to low power Bluetooth state
+  app_comm_set_sniff_interval(SNIFF_INTERVAL_NORMAL);
+  colour_update_proc();
   
   colour_update_proc();
   
+  if(seconds_hand==1){ 
+// Subscribe to seconds tick event  
+  tick_timer_service_subscribe(SECOND_UNIT, handle_time_update);
+ }
+  else{
+// Only tick once a minute, much more time asleep
+tick_timer_service_subscribe(MINUTE_UNIT, handle_time_update);
+  }
+  
 // init hand paths
-  s_minute_arrow = gpath_create(&MINUTE_HAND_POINTS);
+s_minute_arrow = gpath_create(&MINUTE_HAND_POINTS);
   s_hour_arrow = gpath_create(&HOUR_HAND_POINTS);
   s_batt_arrow = gpath_create(&BATT_HAND_POINTS);
 
@@ -288,9 +308,7 @@ static void init() {
  
   GPoint batt_center = GPoint(71,122);
   gpath_move_to(s_batt_arrow, batt_center);
-  
-
-  
+    
 // Create window  
   s_window = window_create();
   window_set_window_handlers(s_window, (WindowHandlers) {
@@ -298,8 +316,6 @@ static void init() {
     .unload = window_unload,
   });
   window_stack_push(s_window, true);
-
-
 }
 
 static void deinit() {
@@ -318,4 +334,3 @@ int main() {
   app_event_loop();
   deinit();
 }
-
